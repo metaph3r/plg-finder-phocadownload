@@ -1,0 +1,29 @@
+services:
+  httpd:
+    image: xampp/httpd:2.4
+    volumes:
+      - ./app:/app
+      - php-socket:/var/run/php
+    labels:
+      - traefik.enable=true
+    ports:
+      - "80:80"
+  php:
+    image: xampp/php:8.4
+    environment:
+      - APP_ENV=dev
+    volumes:
+      - ./app:/app
+      - php-socket:/var/run/php
+  mysql:
+    image: mysql:8.4
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=joomla
+      - MYSQL_USER=joomla
+      - MYSQL_PASSWORD=joomla
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+
+volumes:
+  php-socket:
