@@ -1,10 +1,18 @@
 services:
-  php:
-    image: php:8.4-apache
+  httpd:
+    image: xampp/httpd:2.4
     volumes:
-      - ./www:/var/www/html
+      - ./www:/app/public
+      - php-socket:/var/run/php
     ports:
       - "80:80"
+  php:
+    image: xampp/php:8.4
+    environment:
+      - APP_ENV=dev
+    volumes:
+      - ./www:/app/public
+      - php-socket:/var/run/php
   mysql:
     image: mysql:8.4
     environment:
@@ -14,3 +22,5 @@ services:
       - MYSQL_PASSWORD=joomla
     volumes:
       - ./mysql-data:/var/lib/mysql
+volumes:
+  php-socket:
